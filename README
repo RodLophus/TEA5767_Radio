@@ -1,0 +1,52 @@
+Simple radio tuner using Arduino Leonardo and the Philips TEA5767 module
+
+
+Notes:
+-----
+- The TEA5767 works with 3.3V. Use an 3.3V powered Arduino (e.g.: Freeduino Leonardo) or an level shifter
+- The LCD display must be powered by the 5V reail.  Most LCD modules works fine with 3.3V signal levels, but some does not
+- The TEA5767 does not update the signal level indicator on read.  The signal level will only be update on station change
+
+
+Connections:
+-----------
+- Encoder (with "pushable" shaft switch):
+Push button     ---> Arduino pin 0
+Encoder pin "A" ---> Arduino pin 1
+Encoder pin "B" ---> Arduino pin 4
+
+
+- LCD:
+D7 ---> Arduino pin 8
+D6 ---> Arduino pin 9
+D5 ---> Arduino pin 10
+D4 ---> Arduino pin 11
+RS ---> Arduino pin 13
+RW ---> GND
+E ----> Arduino pin 12
+VO ---> 2k2 resistor to GND (contrast)
+
+
+- TEA5756 module:
+
+Top view:
++-10--9--8--7--6-+
+|  +------+  ++  |
+|  | TEA  |  ||  |
+|  | 5767 |  ||  |
+|  +------+  ++  |
++--1--2--3--4--5-+
+
+1 ----> Arduino SDA
+2 ----> Arduino SCL
+3 ----> GND
+5 ----> +3.3V
+6 ----> GND
+7 ----> Audio out (right channel)
+8 ----> Audio out (left channel)
+10 ---> Antena
+
+
+Thank you for your interest.
+Have fun!
+rodolfo.manin@gmail.com
