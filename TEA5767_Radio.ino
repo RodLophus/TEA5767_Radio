@@ -93,7 +93,7 @@ LiquidCrystal lcd(13, 12, 11, 10, 9, 8);
  *             updateScale()               *
  * Moves the "needle" over the radio scale *
 \*******************************************/
-void updateScale(){
+void updateScale() {
   int lcdBase = (frequency  - 88) * 4;  // LCD column pixel index (0 <= lcdBase <= (16 * 5))
   if(lcdBase > 79) lcdBase = 79;
   
@@ -186,8 +186,8 @@ void setup() {
   lcd.createChar(SCALE_CLEAR, scaleChar);
 
   // Create custom character to represent all (5) possible needle´s position
-  for(int j=0; j<5; j++){
-    for(i=0; i<8; i++)
+  for(int j = 0; j < 5; j++) {
+    for(i = 0; i < 8; i++)
       needleChar[i] = scaleChar[i] | (0b10000 >> j);
     lcd.createChar(j, needleChar);
   }
@@ -196,13 +196,13 @@ void setup() {
   lcd.clear();
   
   // Draw the dial scale´s background
-  for(i=0; i<16; i++)
+  for(i = 0; i < 16; i++)
     lcd.write(SCALE_CLEAR);
    
   pinMode(ENCODER_A, INPUT); digitalWrite(ENCODER_A, HIGH);
   pinMode(ENCODER_B, INPUT); digitalWrite(ENCODER_B, HIGH);
   
-  // Only Arduino Leonardo has interrupts 2 and 3 (for pins 0 and 1).
+  // Arduino Leonardo has interrupts 2 and 3 (for pins 0 and 1).
   // You can use the PinChangeInt to modify this code for other Arduinos
   // (pins 2 and 3 have interrupts on all Arduinos, but they are being used by the TEA5767´s I2C interface)
   attachInterrupt(2, isrSwitch, RISING);
@@ -225,21 +225,22 @@ void loop() {
   int searchDirection;
   
   // Update the Auto / Manual indicator
-  lcd.setCursor(12,1);
+  lcd.setCursor(12, 1);
   lcd.write(bitRead(status, ST_AUTO) ? 'A' : 'M');
 
   if (Radio.read_status(buf) == 1) {
     // Get radio data
     frequency = floor(Radio.frequency_available(buf) / 100000 + .5) / 10;
     stereo = Radio.stereo(buf);
+    // 0 <= Radio.signal_level <= 15
     signalLevel = (Radio.signal_level(buf) * 100) / 15;
 
     // Update the radio dial
     updateScale();
     
     // Signal level indicator
-    lcd.setCursor(0,1);
-    lcd.write(183);    // Japanese character which looks like an antenna :)
+    lcd.setCursor(0, 1);
+    lcd.write(183);    // Japanese character that looks like an antenna :)
     if(signalLevel < 100) lcd.write(' ');
     lcd.print(signalLevel);
     lcd.write('%');
@@ -250,7 +251,7 @@ void loop() {
     lcd.print(frequency, 1);
 
     // Mono / stereo indicator
-    lcd.setCursor(14,1);
+    lcd.setCursor(14, 1);
     if(stereo){
       lcd.write(STEREO_CHAR_S);
       lcd.write(STEREO_CHAR_T);
@@ -274,8 +275,10 @@ void loop() {
       delay(50);
     } else {
       // Manual tuning mode
-      if(frequency < 108) frequency += 0.1;
-      Radio.set_frequency(frequency);
+      if(frequency < 108) {
+        frequency += 0.1;
+        Radio.set_frequency(frequency);
+      }
     }
     bitWrite(status, ST_GO_UP, 0);
   }
@@ -290,8 +293,10 @@ void loop() {
       delay(50);
     } else {
       // Manual tuning mode
-      if(frequency > 0) frequency -= 0.1;
-      Radio.set_frequency(frequency);
+      if(frequency > 88) {
+        frequency -= 0.1;
+        Radio.set_frequency(frequency);
+      }
     }
     bitWrite(status, ST_GO_DOWN, 0);
   }
