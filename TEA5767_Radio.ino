@@ -120,6 +120,7 @@ void updateScale() {
  * Catch encoder´s interrupts *
 \******************************/
 void isrEncoder() {
+  delay(50);    // Debouncing (for crappy encoders)
   if(digitalRead(ENCODER_B) == HIGH){
     bitWrite(status, ST_GO_UP, 1);
   } else
@@ -128,10 +129,11 @@ void isrEncoder() {
 
 
 /*****************************\
- *        isrSwitchr()       *
+ *        isrSwitch()        *
  * Catch switch´s interrupts *
 \*****************************/
 void isrSwitch() {
+  delay(50);    // Debouncing
   if(bitRead(status, ST_AUTO))
     bitWrite(status, ST_AUTO, 0);
   else
@@ -145,7 +147,7 @@ void isrSwitch() {
 void setup() {
   int i;
   byte needleChar[8];
-  
+
   // Stylized "S"
   byte stereoChar1[8] = {
     0b01111,
@@ -191,7 +193,7 @@ void setup() {
       needleChar[i] = scaleChar[i] | (0b10000 >> j);
     lcd.createChar(j, needleChar);
   }
-  
+
   lcd.begin(16, 2);
   lcd.clear();
   
@@ -199,8 +201,9 @@ void setup() {
   for(i = 0; i < 16; i++)
     lcd.write(SCALE_CLEAR);
    
-  pinMode(ENCODER_A, INPUT); digitalWrite(ENCODER_A, HIGH);
-  pinMode(ENCODER_B, INPUT); digitalWrite(ENCODER_B, HIGH);
+  pinMode(ENCODER_SW, INPUT); digitalWrite(ENCODER_SW, HIGH);
+  pinMode(ENCODER_A, INPUT);  digitalWrite(ENCODER_A, HIGH);
+  pinMode(ENCODER_B, INPUT);  digitalWrite(ENCODER_B, HIGH);
   
   // Arduino Leonardo has interrupts 2 and 3 (for pins 0 and 1).
   // You can use the PinChangeInt to modify this code for other Arduinos
