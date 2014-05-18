@@ -6,13 +6,9 @@ Simple radio tuner using Arduino Leonardo and the Philips TEA5767 module
 
 Notes:
 -----
-- The TEA5767 works with 3.3V. Use an 3.3V powered Arduino (e.g.: Freeduino Leonardo) or an level shifter
+- The TEA5767 works VCC from 2.5 to 5V.  It is safer to use a 3.3V powered Arduino (e.g.: Freeduino Leonardo) if available
 - The LCD display must be powered by the 5V reail.  Most LCD modules works fine with 3.3V signal levels, but some does not
 - The TEA5767 does not update the signal level indicator on read.  The signal level will only be update on station change
-- To modify this code for use with other Arduino boards: just use the PinChangeInt library instead of Arduino´s native 
-  attachInterrupt() and it should work fine (not tested).  REMEMBER TO POWER YOUR ARDUINO BY A 3.3V SUPPLY
-  (e.g.: http://learn.adafruit.com/arduino-tips-tricks-and-techniques/3-3v-conversion) OR USE LEVEL SHIFTERS,
-  OR YOU WILL DAMAGE THE RADIO MODULE! 
 
 
 Connections:
@@ -206,8 +202,6 @@ void setup() {
   pinMode(ENCODER_B, INPUT);  digitalWrite(ENCODER_B, HIGH);
   
   // Arduino Leonardo has interrupts 2 and 3 (for pins 0 and 1).
-  // You can use the PinChangeInt to modify this code for other Arduinos
-  // (pins 2 and 3 have interrupts on all Arduinos, but they are being used by the TEA5767´s I2C interface)
   attachInterrupt(2, isrSwitch, RISING);
   attachInterrupt(3, isrEncoder, RISING);
 

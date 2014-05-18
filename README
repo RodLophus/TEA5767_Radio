@@ -1,4 +1,3 @@
 
 Simple radio tuner using Arduino Leonardo and the Philips TEA5767 module
 
-Read the source code comments if you whant to modify it for use with other Arduino boards.
